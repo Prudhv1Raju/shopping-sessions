@@ -1,0 +1,50 @@
+{
+  "scale20m-parallel": {
+    "tag": "scale20m-parallel",
+    "data": "work\\scale20m",
+    "threads": 8,
+    "seconds": 8.483,
+    "peak_process_tree_rss_bytes": 3087056896,
+    "exit_code": 0
+  },
+  "scale60m-run": {
+    "tag": "scale60m-run",
+    "data": "work\\scale60m",
+    "threads": 8,
+    "seconds": 23.932,
+    "peak_process_tree_rss_bytes": 9200410624,
+    "exit_code": 0
+  },
+  "aggregate_checks": {
+    "scale20m-parallel": {
+      "user_daily": {
+        "rows": 2245254,
+        "sessions": 3408218,
+        "revenue_cents": 6695614834
+      },
+      "campaign_daily": {
+        "rows": 28014,
+        "sessions": 3408218,
+        "revenue_cents": 6695614834,
+        "assisted_sessions": 35471846,
+        "organic_sessions": 1315274
+      },
+      "scratch_plus_output_bytes": 135815803
+    },
+    "scale60m-run": {
+      "user_daily": {
+        "rows": 6658935,
+        "sessions": 10067851,
+        "revenue_cents": 20418435163
+      },
+      "campaign_daily": {
+        "rows": 28014,
+        "sessions": 10067851,
+        "revenue_cents": 20418435163,
+        "assisted_sessions": 104163626,
+        "organic_sessions": 3852080
+      },
+      "scratch_plus_output_bytes": 398131744
+    }
+  }
+}

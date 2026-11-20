@@ -1,0 +1,30 @@
+name: Validate Linux container
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  fixtures:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: pip install -r requirements.txt
+      - run: docker build --platform linux/amd64 -t shopping-sessions:latest .
+      - name: Supplied fixtures under scorer filesystem restrictions
+        env:
+          CPUS: '2'
+          MEM: 5g
+        run: python scripts/run_fixtures.py fixtures -- sh scripts/docker_run.sh
+      - name: Additional adversarial cases
+        env:
+          CPUS: '2'
+          MEM: 5g
+        run: |
+          python tests/generate_cases.py --output /tmp/adversarial
+          python scripts/run_fixtures.py /tmp/adversarial -- sh scripts/docker_run.sh

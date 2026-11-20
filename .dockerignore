@@ -1,0 +1,10 @@
+*
+!Cargo.toml
+!Cargo.lock
+!src/
+!src/**
+!requirements.txt
+!pipeline/
+!pipeline/**
+!run.sh
+!Dockerfile
