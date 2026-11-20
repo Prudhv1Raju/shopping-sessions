@@ -1,0 +1,10 @@
+{
+  "user_daily": {
+    "rows": 117038,
+    "sha256": "853f7caf9fb69f1689afbde3d2e52cc6e1399b453707771d646b06667cf980da"
+  },
+  "campaign_daily": {
+    "rows": 27400,
+    "sha256": "e4c1dc234e92968ac078ea5acef82b75c7fd2e8cfa5dab11a93b2fbf243e3ce6"
+  }
+}

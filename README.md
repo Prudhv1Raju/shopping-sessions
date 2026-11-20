@@ -16,12 +16,15 @@ python3 scripts/run_fixtures.py scratch/adversarial -- sh scripts/docker_run.sh
 
 The wrapper applies a read-only root, UID 1000, no network, a 64 MB `/tmp`, eight CPUs, 24 GB memory with no swap, and separate data/output/scratch mounts. Its resource defaults can be overridden with `CPUS` and `MEM`. The GitHub Actions workflow builds and tests the Linux container using smaller limits for the tiny fixture datasets; a successful local native run alone does not certify the container.
 
-Generate the public development input using the supplied generator, then compare with the separately supplied answer:
+Generate the public development input using the bundled copy of the supplied generator, then compare with the separately supplied answer:
 
 ```sh
-generate --seed 1 --events 1000000 --clicks 250000 --output dev
+cargo build --release --locked --offline --manifest-path tests/generator/Cargo.toml
+tests/generator/target/release/generate --seed 1 --events 1000000 --clicks 250000 --output dev
 sh scripts/docker_run.sh dev out
 python3 scripts/compare.py out dev-answer
+# Alternatively, verify canonical SHA-256 digests of the public answer:
+python3 tests/check_dev.py out
 ```
 
 Use a fresh output folder on each run. The pipeline rejects existing output Parquet or an existing `native-output` scratch folder instead of silently combining results from separate runs. Keep generated datasets, output tables, scratch files, and build artifacts out of Git.

@@ -15,7 +15,12 @@ jobs:
         with:
           python-version: '3.12'
       - run: pip install -r requirements.txt
-      - run: docker build --platform linux/amd64 -t shopping-sessions:latest .
+      - run: timeout 600 docker build --platform linux/amd64 -t shopping-sessions:latest .
+      - name: Check image size
+        run: |
+          size=$(docker image inspect shopping-sessions:latest --format '{{.Size}}')
+          echo "Image size: $size bytes"
+          test "$size" -le 8589934592
       - name: Supplied fixtures under scorer filesystem restrictions
         env:
           CPUS: '2'
@@ -28,3 +33,12 @@ jobs:
         run: |
           python tests/generate_cases.py --output /tmp/adversarial
           python scripts/run_fixtures.py /tmp/adversarial -- sh scripts/docker_run.sh
+      - name: Generate and validate public development dataset
+        env:
+          CPUS: '2'
+          MEM: 5g
+        run: |
+          cargo build --release --locked --offline --manifest-path tests/generator/Cargo.toml
+          tests/generator/target/release/generate --seed 1 --events 1000000 --clicks 250000 --threads 2 --output /tmp/public-dev
+          sh scripts/docker_run.sh /tmp/public-dev /tmp/public-dev-output
+          python tests/check_dev.py /tmp/public-dev-output
